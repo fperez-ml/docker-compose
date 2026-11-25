@@ -1,0 +1,40 @@
+services:
+  php:
+    image: php:apache
+    restart: always
+    networks:
+      - net
+    ports:
+      - 9090:80
+    
+
+  mariadb:
+    image: mariadb:10.11
+    restart: always
+    networks:
+      - net
+    environment:
+      MYSQL_ROOT_PASSWORD: notSecureChangeMe
+    ports:
+      - 3036:3036
+    volumes:
+      - mariadb-data:/var/lib/mysql:Z 
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    networks:
+      - net
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: notSecureChangeMe
+
+volumes:
+  mariadb-data:
+
+networks:
+  net:
+    driver: bridge
